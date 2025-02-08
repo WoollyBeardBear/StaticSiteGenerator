@@ -1,6 +1,6 @@
 import unittest
 
-from textnode import TextNode, TextType
+from textnode import *
 
 class TestTextNode(unittest.TestCase):
     def test_eq(self):
@@ -17,6 +17,19 @@ class TestTextNode(unittest.TestCase):
         node = TextNode("This is a different", TextType.BOLD)
         node2 = TextNode("This is a text node", TextType.BOLD)
         self.assertNotEqual(node.text, node2.text)
+    
+    def test_node_to_node(self):
+        node1 = TextNode("This is a text node", TextType.BOLD)
+        node2 = TextNode("Hello There", TextType.LINKS, "https://www.google.com")
+        node3 = TextNode("This is a picture of a cat licking itself", TextType.IMAGES, "https://images.app.goo.gl/E5UVZKKDpEzy2hwA8")
+        print("________________________")
+        print("TextNode to HTMLNode test!")
+        htmlnode1 = text_node_to_html_node(node1)
+        print(f"{node1} to {htmlnode1}")
+        htmlnode2 = text_node_to_html_node(node2)
+        print(f"{node2} to {htmlnode2}")
+        htmlnode3 = text_node_to_html_node(node3)
+        print(f"{node3} to {htmlnode3}")
 
 
 if __name__ == "__main__":
