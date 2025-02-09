@@ -31,6 +31,19 @@ class TestTextNode(unittest.TestCase):
         htmlnode3 = text_node_to_html_node(node3)
         print(f"{node3} to {htmlnode3}")
 
+    def test_split_delimiter(self):
+        print("--------------------------")
+        print("Split Node Delimiter Test")
+        nodes = [
+            TextNode("This is text with a `code block` word and a second `code block number two`", TextType.NORMAL),
+            TextNode("This is a text with a **bolded phrase**", TextType.NORMAL),
+            TextNode("THIS WHOLE THING IS BOLDED AND **SHOULDNT** BE SPLIT UP", TextType.BOLD)
+        ]
+        code_nodes = split_nodes_delimiter(nodes, "`", TextType.CODE)
+        bold_nodes = split_nodes_delimiter(nodes, "**", TextType.BOLD)
+        print(f"code nodes {code_nodes}")
+        print(f"bold nodes {bold_nodes}")
+
 
 if __name__ == "__main__":
     unittest.main()
