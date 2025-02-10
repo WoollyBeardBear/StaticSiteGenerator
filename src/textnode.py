@@ -1,5 +1,6 @@
 from enum import Enum
 from htmlnode import *
+import re
 
 class TextType(Enum):
     NORMAL = "normal"
@@ -63,7 +64,15 @@ def split_nodes_delimiter(old_nodes, delimiter, text_type):
                     count += 1
             new_nodes.extend(nodes)
     return new_nodes
-            
+
+def extract_markdown_images(text):
+    url_alt_text_tuples = re.findall(r"!\[([^\[\]]*)\]\(([^\(\)]*)\)", text)
+    return url_alt_text_tuples
+
+def extract_markdown_links(text):
+    link_tuples = re.findall(r"(?<!!)\[([^\[\]]*)\]\(([^\(\)]*)\)", text)
+    return link_tuples
+    
 
 
 
