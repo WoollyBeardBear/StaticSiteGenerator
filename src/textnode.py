@@ -56,6 +56,8 @@ def split_nodes_delimiter(old_nodes, delimiter, text_type):
             nodes = []
             count = 0
             for text in texts:
+                if text == "":
+                    continue
                 if count % 2 == 0:
                     nodes.append(TextNode(text, TextType.NORMAL))
                     count += 1
@@ -73,6 +75,63 @@ def extract_markdown_links(text):
     link_tuples = re.findall(r"(?<!!)\[([^\[\]]*)\]\(([^\(\)]*)\)", text)
     return link_tuples
     
+def split_nodes_image(old_nodes):
+    new_nodes = []
+    for node in old_nodes:
+        nodes = []
+        node_text = node.text
+        images_list = extract_markdown_images(node_text)
+        if len(images_list) == 0:
+            new_nodes.append(node)
+            continue
+        for image in images_list:
+            alt_text, url = image
+            sections = node_text.split(f"![{alt_text}]({url})", 1)
+            for i in range(len(sections)):
+                if sections[i] == "":
+                    continue
+                if i % 2 == 0:
+                    nodes.append(TextNode(sections[i], TextType.NORMAL))
+                    nodes.append(TextNode(alt_text, TextType.IMAGES, url))
+                if i == 1:
+                    node_text = sections[i]
+
+                    
+        new_nodes.extend(nodes)
+    return new_nodes
+
+def split_nodes_link(old_nodes):
+    new_nodes = []
+    for node in old_nodes:
+        nodes = []
+        node_text = node.text
+        links_list = extract_markdown_links(node_text)
+        link_num = len(links_list) 
+        count = 0
+        if len(links_list) == 0:
+            new_nodes.append(node)
+            continue
+        for link in links_list:
+            text, url = link
+            sections = node_text.split(f"[{text}]({url})", 1)
+            for i in range(len(sections)):
+                if sections[i] == "":
+                    continue
+                if i % 2 == 0:
+                    nodes.append(TextNode(sections[i], TextType.NORMAL))
+                    nodes.append(TextNode(text, TextType.LINKS, url))
+                    count += 1
+                if count == link_num:
+                    nodes.append(TextNode(sections[i], TextType.NORMAL))
+                if i == 1:
+                    node_text = sections[i]
+
+                    
+        new_nodes.extend(nodes)
+    return new_nodes
+
+
+
 
 
 

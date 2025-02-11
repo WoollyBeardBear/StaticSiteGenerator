@@ -54,6 +54,24 @@ class TestTextNode(unittest.TestCase):
         print(extract_markdown_links(text))
         # [("to boot dev", "https://www.boot.dev"), ("to youtube", "https://www.youtube.com/@bootdotdev")]
 
+    def test_image_node_splitter(self):
+        print("--------------------------")
+        print("Image node splitter")
+        nodes = [
+            TextNode("This is text with a ![rick roll](https://i.imgur.com/aKaOqIh.gif) and ![obi wan](https://i.imgur.com/fJRm4Vk.jpeg)", TextType.NORMAL),
+            TextNode("This is text with a ![another rick roll](https://i.imgur.com/aKaOqIh.gif) and ![another obi wan](https://i.imgur.com/fJRm4Vk.jpeg)", TextType.NORMAL)
+        ]
+        print(split_nodes_image(nodes))
+
+    def test_link_node_splitter(self):
+        print("--------------------------")
+        print("LINK node splitter")
+        nodes = [
+            TextNode("This is text with a [rick roll](https://i.imgur.com/aKaOqIh.gif) and ![obi wan](https://i.imgur.com/fJRm4Vk.jpeg)", TextType.NORMAL),
+            TextNode("[to boot dev](https://www.boot.dev) and [to youtube](https://www.youtube.com/@bootdotdev)", TextType.NORMAL,)
+        ]
+        print(split_nodes_link(nodes))
+
 
 
 if __name__ == "__main__":
