@@ -87,7 +87,6 @@ def split_nodes_image(old_nodes):
             new_nodes.append(node)
             continue
         for image in images_list:
-
             alt_text, url = image
             sections = node_text.split(f"![{alt_text}]({url})", 1)
             for i in range(len(sections)):
@@ -131,14 +130,17 @@ def split_nodes_link(old_nodes):
                     nodes.append(TextNode(text, TextType.LINKS, url))
                     count += 1
                 if i == 1:
-                    node_text = sections[i]
-#This is not done. Still having issues with the text AFTER a link if it is the last link. This happens on the images one too! 
+                    node_text = sections[i] 
                     
         new_nodes.extend(nodes)
     return new_nodes
 
 
-
+def text_to_text_nodes(text):
+    node = [TextNode(text, TextType.NORMAL)]
+    nodes = split_nodes_delimiter(split_nodes_delimiter(split_nodes_delimiter(node, "**", TextType.BOLD), "*", TextType.ITALIC), "`", TextType.CODE)
+    nodes = split_nodes_link(split_nodes_image(nodes))
+    return nodes
 
 
 

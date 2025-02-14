@@ -72,6 +72,14 @@ class TestTextNode(unittest.TestCase):
         ]
         print(split_nodes_link(nodes))
 
+    def test_text_to_text_node(self):
+        print("--------------------------")
+        print("text to text node!")
+        text = "This is **bold text** with an *italic* word and a `code block` and an ![obi wan image](https://i.imgur.com/fJRm4Vk.jpeg) and a [link](https://boot.dev)"
+        print(text_to_text_nodes(text))
+
+
+
 
 
 if __name__ == "__main__":
