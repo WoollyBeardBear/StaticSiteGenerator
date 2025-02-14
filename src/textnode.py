@@ -80,19 +80,25 @@ def split_nodes_image(old_nodes):
     for node in old_nodes:
         nodes = []
         node_text = node.text
+        count = 0 
         images_list = extract_markdown_images(node_text)
-        if len(images_list) == 0:
+        image_num = len(images_list)
+        if image_num == 0:
             new_nodes.append(node)
             continue
         for image in images_list:
+
             alt_text, url = image
             sections = node_text.split(f"![{alt_text}]({url})", 1)
             for i in range(len(sections)):
                 if sections[i] == "":
                     continue
-                if i % 2 == 0:
+                if count == image_num:
+                    nodes.append(TextNode(sections[i], TextType.NORMAL))
+                if i == 0:
                     nodes.append(TextNode(sections[i], TextType.NORMAL))
                     nodes.append(TextNode(alt_text, TextType.IMAGES, url))
+                    count += 1
                 if i == 1:
                     node_text = sections[i]
 
@@ -106,7 +112,7 @@ def split_nodes_link(old_nodes):
         nodes = []
         node_text = node.text
         links_list = extract_markdown_links(node_text)
-        link_num = len(links_list) 
+        link_num = len(links_list)
         count = 0
         if len(links_list) == 0:
             new_nodes.append(node)
@@ -115,17 +121,18 @@ def split_nodes_link(old_nodes):
             text, url = link
             sections = node_text.split(f"[{text}]({url})", 1)
             for i in range(len(sections)):
-                if sections[i] == "":
+                if i == 0 and sections[i] == "":
+                    nodes.append(TextNode(text, TextType.LINKS, url))
                     continue
+                if count == link_num:
+                    nodes.append(TextNode(sections[i], TextType.NORMAL))
                 if i % 2 == 0:
                     nodes.append(TextNode(sections[i], TextType.NORMAL))
                     nodes.append(TextNode(text, TextType.LINKS, url))
                     count += 1
-                if count == link_num:
-                    nodes.append(TextNode(sections[i], TextType.NORMAL))
                 if i == 1:
                     node_text = sections[i]
-
+#This is not done. Still having issues with the text AFTER a link if it is the last link. This happens on the images one too! 
                     
         new_nodes.extend(nodes)
     return new_nodes

@@ -58,7 +58,7 @@ class TestTextNode(unittest.TestCase):
         print("--------------------------")
         print("Image node splitter")
         nodes = [
-            TextNode("This is text with a ![rick roll](https://i.imgur.com/aKaOqIh.gif) and ![obi wan](https://i.imgur.com/fJRm4Vk.jpeg)", TextType.NORMAL),
+            TextNode("This is text with a ![rick roll](https://i.imgur.com/aKaOqIh.gif) and ![obi wan](https://i.imgur.com/fJRm4Vk.jpeg) what about this?", TextType.NORMAL),
             TextNode("This is text with a ![another rick roll](https://i.imgur.com/aKaOqIh.gif) and ![another obi wan](https://i.imgur.com/fJRm4Vk.jpeg)", TextType.NORMAL)
         ]
         print(split_nodes_image(nodes))
@@ -67,8 +67,8 @@ class TestTextNode(unittest.TestCase):
         print("--------------------------")
         print("LINK node splitter")
         nodes = [
-            TextNode("This is text with a [rick roll](https://i.imgur.com/aKaOqIh.gif) and ![obi wan](https://i.imgur.com/fJRm4Vk.jpeg)", TextType.NORMAL),
-            TextNode("[to boot dev](https://www.boot.dev) and [to youtube](https://www.youtube.com/@bootdotdev)", TextType.NORMAL,)
+            TextNode("This is text with a [rick roll](https://i.imgur.com/aKaOqIh.gif) and this!", TextType.NORMAL),
+            TextNode("[to boot dev](https://www.boot.dev) and [to youtube](https://www.youtube.com/@bootdotdev) what about this?", TextType.NORMAL,)
         ]
         print(split_nodes_link(nodes))
 
