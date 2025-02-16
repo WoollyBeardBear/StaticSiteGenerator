@@ -120,7 +120,4 @@ def text_to_text_nodes(text):
     return nodes
 
 
-def markdown_to_blocks(markdown):
-    blocks = markdown.split("\n\n")
-    filtered = list(filter(lambda x: x.strip() != "", blocks))
-    return filtered
+
