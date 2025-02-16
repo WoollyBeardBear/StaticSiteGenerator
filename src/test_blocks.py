@@ -30,7 +30,10 @@ class TestMarkdownBlocks(unittest.TestCase):
         print(block_to_block_type(block5))
 
     def test_to_htmlnode(self):
-        markdown = "### This is a **bold heading** it should have a few children [to google](www.google.com) lets see!"
+        markdown = ("### This is a **bold heading** it should have a few children [to google](www.google.com) lets see!\n\n"
+                    + "```def main:\n\tprint('hello world')```\n\n"
+                    + "> Man does not live on bread alone\n> but on every word that comes from the mouth of God\n\n"
+                    + "1. He said goodbye\n2. I said hello\n3. hello hello")
         print("-------------------------")
-        print("text to htmlnodes")
+        print("markdown to htmlnodes")
         print(markdown_to_htmlnode(markdown)) 
