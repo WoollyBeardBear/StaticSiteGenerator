@@ -60,21 +60,22 @@ def markdown_to_htmlnode(markdown):
             case "code":
                 block = block.strip("`")
                 code_htmlnodes = ParentNode("<code>", text_to_children(block))
-                code_htmlnodes = ParentNode("<pre>", code_htmlnodes)
-                final_htmlnodes.append(code_htmlnodes)
+                pre_code_htmlnodes = ParentNode("<pre>", code_htmlnodes)
+                final_htmlnodes.append(pre_code_htmlnodes)
             case "quote":
                 cleaned_quote_block = block.replace(">", "").strip()
                 quote_htmlnodes = ParentNode("<blockquote>",text_to_children(cleaned_quote_block))
                 final_htmlnodes.append(quote_htmlnodes)
             case "unordered_list":
-                cleaned_uolist_block = block.replace("*-","").strip()
+                uolist_split = block.strip().split("\n")
                 list_nodes = []
-                for line in cleaned_uolist_block:
-                    list_nodes.append(HTMLNode("<li>", text_to_children(line)))
+                for line in uolist_split:
+                    cleaned_line = line.lstrip("* ")
+                    list_nodes.append(HTMLNode("<li>", text_to_children(cleaned_line)))
                 uolist_htmlnodes = ParentNode("<ul>", list_nodes)
                 final_htmlnodes.append(uolist_htmlnodes)
             case "ordered_list":
-                lines = block.split("\n")
+                lines = block.split("\n").strip()
                 list_nodes = []
                 line_num = 1
                 for line in lines:
@@ -82,11 +83,9 @@ def markdown_to_htmlnode(markdown):
                     line_num += 1
                 olist_htmlnodes = ParentNode("<ol>", list_nodes)
                 final_htmlnodes.append(olist_htmlnodes)
-            
-
-                
-
-
+            case "paragraph":
+                paragraph_nodes = ParentNode("<p>", text_to_children(block))
+                final_htmlnodes.append(paragraph_nodes)
     return ParentNode("<div>", final_htmlnodes)
                 
 

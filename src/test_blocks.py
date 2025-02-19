@@ -33,7 +33,8 @@ class TestMarkdownBlocks(unittest.TestCase):
         markdown = ("### This is a **bold heading** it should have a few children [to google](www.google.com) lets see!\n\n"
                     + "```def main:\n\tprint('hello world')```\n\n"
                     + "> Man does not live on bread alone\n> but on every word that comes from the mouth of God\n\n"
-                    + "1. He said goodbye\n2. I said hello\n3. hello hello")
+                    + "* He said goodbye\n* I said hello\n* hello hello\n\n"
+                    + "This is just a noraml old paragraph BORING not even a single bold word")
         print("-------------------------")
         print("markdown to htmlnodes")
         print(markdown_to_htmlnode(markdown)) 
