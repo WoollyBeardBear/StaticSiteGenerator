@@ -38,3 +38,10 @@ class TestMarkdownBlocks(unittest.TestCase):
         print("-------------------------")
         print("markdown to htmlnodes")
         print(markdown_to_htmlnode(markdown)) 
+
+    def test_extract_title(self):
+        print("--------------------")
+        print("Extract title test")
+        markdown = "this is not a title\n# This is the header h1\nhere is another one\n## yeth yup"
+        print(extract_title(markdown))
+        

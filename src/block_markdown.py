@@ -71,15 +71,15 @@ def markdown_to_htmlnode(markdown):
                 list_nodes = []
                 for line in uolist_split:
                     cleaned_line = line.lstrip("* ")
-                    list_nodes.append(HTMLNode("<li>", text_to_children(cleaned_line)))
+                    list_nodes.append(LeafNode("<li>", text_to_children(cleaned_line)))
                 uolist_htmlnodes = ParentNode("<ul>", list_nodes)
                 final_htmlnodes.append(uolist_htmlnodes)
             case "ordered_list":
-                lines = block.split("\n").strip()
+                lines = block.split("\n")
                 list_nodes = []
                 line_num = 1
                 for line in lines:
-                    list_nodes.append(HTMLNode("<li>", text_to_children(line.lstrip(f"{line_num}. "))))
+                    list_nodes.append(LeafNode("<li>", text_to_children(line.strip().lstrip(f"{line_num}. "))))
                     line_num += 1
                 olist_htmlnodes = ParentNode("<ol>", list_nodes)
                 final_htmlnodes.append(olist_htmlnodes)
@@ -96,4 +96,11 @@ def text_to_children(text):
         htmlnode = text_node_to_html_node(textnode)
         htmlnodes.append(htmlnode)
     return htmlnodes
+
+def extract_title(markdown):
+    lines = markdown.split("\n")
+    for line in lines:
+        if line.startswith("#"):
+            return line.lstrip("# ").strip()
+    raise Exception("No header")
 
