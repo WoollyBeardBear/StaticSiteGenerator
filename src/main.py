@@ -3,35 +3,30 @@ from textnode import TextNode, TextType
 import os
 
 def main():
-    TN = TextNode("HELLO THERE", TextType.BOLD, "https://www.boot.dev")
-    print(TN)
-    copy_tree("./static")
+    copy_static()
 
 
-
-def copy_tree(path, times=0):
-    times += 1
-    dst_base_dir = "./public"
-    new_path = ""
-    if os.path.exists("./public") and times == 0:
-        shutil.rmtree("./public")
-        os.mkdir("./public")
-        new_path = "./public"
-    static_dir = os.listdir(path)
-    for object in static_dir:
-        current_path = path + f"/{object}"
-        new_path += f"/{object}"
-        print(f"current path: {current_path}, new path: {new_path}")
-        if os.path.isdir(current_path):
-            print(f"{current_path} is a directory")
-            os.mkdir(os.path.join(dst_base_dir, new_path))
-            copy_tree(current_path, times)
-        else:
-            print(f"current path: {current_path}, new path: {new_path}")
-            shutil.copy(current_path, new_path)
-            
-            
     
+            
+def copy_static():
+    # Clean destination once
+    if os.path.exists("./public"):
+        shutil.rmtree("./public")
+    os.mkdir("./public")
+    # Start the recursive copy
+    _copy_recursive("./static", "./public")
+    print("copy static complete")
+
+def _copy_recursive(src, dst):
+    static_dir = os.listdir(src)
+    for object in static_dir:
+        current_path = src + f"/{object}"
+        new_path = dst + f"/{object}"
+        if os.path.isdir(current_path):
+            os.mkdir(new_path)
+            _copy_recursive(current_path, new_path)
+        else:
+            shutil.copy(current_path, new_path)
     
 
 main()
