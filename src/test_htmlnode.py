@@ -23,6 +23,9 @@ class TestHTMLNode(unittest.TestCase):
         print("Leaf to html test")
         print(leaf1.to_html())
         print(leaf2.to_html())
+        props = {"class": "my-class", "id": "unique-id"}
+        leaf = LeafNode("div", "Content here", props)
+        print(leaf.to_html())
 
     def test_parent_to_html(self):
         parent = ParentNode(

@@ -8,21 +8,22 @@ def text_node_to_html_node(text_node):
         case text_node.text_type.NORMAL:
             return LeafNode(None, text_node.text)
         case text_node.text_type.BOLD:
-            return LeafNode("<b>",text_node.text)
+            return LeafNode("b",text_node.text)
         case text_node.text_type.ITALIC:
-            return LeafNode("<i>",text_node.text)
+            return LeafNode("i",text_node.text)
         case text_node.text_type.CODE:
-            return LeafNode("<code>",text_node.text)
+            return LeafNode("code",text_node.text)
         case text_node.text_type.LINKS:
-            return LeafNode("<a>",text_node.text, {"href":text_node.url})
+            return LeafNode("a",text_node.text, {"href":text_node.url})
         case text_node.text_type.IMAGES:
-            return LeafNode("<img>", "", {"src": text_node.url, "alt": text_node.text})
+            return LeafNode("img", "", {"src": text_node.url, "alt": text_node.text})
         
 def split_nodes_delimiter(old_nodes, delimiter, text_type):
     new_nodes = []
     for node in old_nodes:
         if node.text_type != TextType.NORMAL:
             new_nodes.append(node)
+            continue
         elif delimiter not in node.text:
             new_nodes.append(node)
         else:
@@ -31,16 +32,13 @@ def split_nodes_delimiter(old_nodes, delimiter, text_type):
             if length > 1 and length % 2 == 0:
                 raise Exception("Invalid markdown syntax")
             nodes = []
-            count = 0
-            for text in texts:
-                if text == "":
+            for i in range(len(texts)):
+                if texts[i] == "":
                     continue
-                if count % 2 == 0:
-                    nodes.append(TextNode(text, TextType.NORMAL))
-                    count += 1
-                elif count % 2 != 0:
-                    nodes.append(TextNode(text, text_type))
-                    count += 1
+                if i % 2 == 0:
+                    nodes.append(TextNode(texts[i], TextType.NORMAL))
+                else:
+                    nodes.append(TextNode(texts[i], text_type))
             new_nodes.extend(nodes)
     return new_nodes
 
@@ -115,7 +113,9 @@ def split_nodes_link(old_nodes):
 
 def text_to_text_nodes(text):
     node = [TextNode(text, TextType.NORMAL)]
-    nodes = split_nodes_delimiter(split_nodes_delimiter(split_nodes_delimiter(node, "**", TextType.BOLD), "*", TextType.ITALIC), "`", TextType.CODE)
+    nodes = split_nodes_delimiter(node, "**", TextType.BOLD)
+    nodes = split_nodes_delimiter(nodes, "*", TextType.ITALIC)
+    nodes = split_nodes_delimiter(nodes , "`", TextType.CODE)
     nodes = split_nodes_link(split_nodes_image(nodes))
     return nodes
 

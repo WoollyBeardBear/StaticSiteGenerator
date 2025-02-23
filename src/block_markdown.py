@@ -53,40 +53,41 @@ def markdown_to_htmlnode(markdown):
         block_type = block_to_block_type(block)
         match block_type:
             case "heading":
-                stripped_block = block.lstrip("# ")
+                stripped_block = block.lstrip("#")
                 heading_count = len(block) - len(stripped_block)
-                heading_htmlnodes = ParentNode(f"<h{heading_count}>", text_to_children(stripped_block))
+                stripped_block = stripped_block.strip()
+                heading_htmlnodes = ParentNode(f"h{heading_count}", text_to_children(stripped_block))
                 final_htmlnodes.append(heading_htmlnodes)
             case "code":
                 block = block.strip("`")
-                code_htmlnodes = ParentNode("<code>", text_to_children(block))
-                pre_code_htmlnodes = ParentNode("<pre>", code_htmlnodes)
+                code_htmlnodes = ParentNode("code", text_to_children(block))
+                pre_code_htmlnodes = ParentNode("pre", code_htmlnodes)
                 final_htmlnodes.append(pre_code_htmlnodes)
             case "quote":
                 cleaned_quote_block = block.replace(">", "").strip()
-                quote_htmlnodes = ParentNode("<blockquote>",text_to_children(cleaned_quote_block))
+                quote_htmlnodes = ParentNode("blockquote",text_to_children(cleaned_quote_block))
                 final_htmlnodes.append(quote_htmlnodes)
             case "unordered_list":
                 uolist_split = block.strip().split("\n")
                 list_nodes = []
                 for line in uolist_split:
                     cleaned_line = line.lstrip("* ")
-                    list_nodes.append(LeafNode("<li>", text_to_children(cleaned_line)))
-                uolist_htmlnodes = ParentNode("<ul>", list_nodes)
+                    list_nodes.append(ParentNode("li", text_to_children(cleaned_line)))
+                uolist_htmlnodes = ParentNode("ul", list_nodes)
                 final_htmlnodes.append(uolist_htmlnodes)
             case "ordered_list":
                 lines = block.split("\n")
                 list_nodes = []
                 line_num = 1
                 for line in lines:
-                    list_nodes.append(LeafNode("<li>", text_to_children(line.strip().lstrip(f"{line_num}. "))))
+                    list_nodes.append(ParentNode("li", text_to_children(line.strip().lstrip(f"{line_num}. "))))
                     line_num += 1
-                olist_htmlnodes = ParentNode("<ol>", list_nodes)
+                olist_htmlnodes = ParentNode("ol", list_nodes)
                 final_htmlnodes.append(olist_htmlnodes)
             case "paragraph":
-                paragraph_nodes = ParentNode("<p>", text_to_children(block))
+                paragraph_nodes = ParentNode("p", text_to_children(block))
                 final_htmlnodes.append(paragraph_nodes)
-    return ParentNode("<div>", final_htmlnodes)
+    return ParentNode("div", final_htmlnodes)
                 
 
 def text_to_children(text):
