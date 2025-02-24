@@ -85,7 +85,11 @@ def markdown_to_htmlnode(markdown):
                 olist_htmlnodes = ParentNode("ol", list_nodes)
                 final_htmlnodes.append(olist_htmlnodes)
             case "paragraph":
-                paragraph_nodes = ParentNode("p", text_to_children(block))
+                children = text_to_children(block)
+                if not children:
+                    paragraph_nodes = LeafNode("p", block)
+                else:
+                    paragraph_nodes = ParentNode("p", text_to_children(block))
                 final_htmlnodes.append(paragraph_nodes)
     return ParentNode("div", final_htmlnodes)
                 

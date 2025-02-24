@@ -64,6 +64,8 @@ def split_nodes_image(old_nodes):
         for image in images_list:
             alt_text, url = image
             sections = node_text.split(f"![{alt_text}]({url})", 1)
+            if image_num == 1:
+                nodes.append(TextNode(alt_text, TextType.IMAGES, url))
             for i in range(len(sections)):
                 if sections[i] == "":
                     continue
@@ -79,6 +81,8 @@ def split_nodes_image(old_nodes):
                     
         new_nodes.extend(nodes)
     return new_nodes
+
+
 
 def split_nodes_link(old_nodes):
     new_nodes = []
@@ -118,6 +122,5 @@ def text_to_text_nodes(text):
     nodes = split_nodes_delimiter(nodes , "`", TextType.CODE)
     nodes = split_nodes_link(split_nodes_image(nodes))
     return nodes
-
 
 
